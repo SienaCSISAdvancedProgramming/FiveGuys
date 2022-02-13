@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -36,7 +37,7 @@ import javax.swing.event.ChangeListener;
  * Original by Jim Teresco, The College of Saint Rose, CSC 523, Summer 2014
  * 
  * @author Jim Teresco
- * @version Spring 2020
+ * @version Spring 2022
  */
 
 // we have many interfaces implemented here, we separate them by commas
@@ -44,40 +45,40 @@ public class FiveGuys implements Runnable, ActionListener, ItemListener, ChangeL
 
     // the maximum number of beef patties allowed on a burger
     private static final int MAX_PATTIES = 4;
-    
-    // what can we get on a burger?  adding items here will cause the code in run
+
+    // what can we get on a burger? adding items here will cause the code in run
     // to create a JCheckBox for each option and the values of the checked boxes
     // to be added to the order
     private static final String[] burgerOptions = {
-        "cheese",
-        "bacon",
-        "ketchup",
-        "mayo",
-        "onion",
-        "pickle",
-        "lettuce",
-        "tomato" 
+            "cheese",
+            "bacon",
+            "ketchup",
+            "mayo",
+            "onion",
+            "pickle",
+            "lettuce",
+            "tomato"
     };
-        
-    // fry sizes: again, the code in init will use this to populate appropriate 
+
+    // fry sizes: again, the code in init will use this to populate appropriate
     // controls, this time, radio buttons
     private static final String[] frySizes = {
-        "None",
-        "Little",
-        "Regular",
-        "Large"
+            "None",
+            "Little",
+            "Regular",
+            "Large"
     };
-    
+
     // peanut preferences: same idea, but these will correspond to values
     // in a slider
     private static final String[] peanutAmounts = {
-        "None",
-        "A little",
-        "Some",
-        "Quite a bit",
-        "Lots"
+            "None",
+            "A little",
+            "Some",
+            "Quite a bit",
+            "Lots"
     };
-        
+
     // the components we need to remember get instance variables
     private JTextArea orderStatus;
     private JTextField name;
@@ -92,23 +93,23 @@ public class FiveGuys implements Runnable, ActionListener, ItemListener, ChangeL
 
     @Override
     public void run() {
-	// set up the GUI "look and feel" which should match
-	// the OS on which we are running
-	JFrame.setDefaultLookAndFeelDecorated(true);
-	
-	// create a JFrame in which we will build our very
-	// tiny GUI, and give the window a name
-	JFrame frame = new JFrame("FiveGuys");
-	frame.setPreferredSize(new Dimension(800,425));
-	
-	// tell the JFrame that when someone closes the
-	// window, the application should terminate
-	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // set up the GUI "look and feel" which should match
+        // the OS on which we are running
+        JFrame.setDefaultLookAndFeelDecorated(true);
 
-	// a BorderLayout JPanel to occupy the frame
-	JPanel framePanel = new JPanel(new BorderLayout());
-	frame.add(framePanel);
-	
+        // create a JFrame in which we will build our very
+        // tiny GUI, and give the window a name
+        JFrame frame = new JFrame("FiveGuys");
+        frame.setPreferredSize(new Dimension(800, 425));
+
+        // tell the JFrame that when someone closes the
+        // window, the application should terminate
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // a BorderLayout JPanel to occupy the frame
+        JPanel framePanel = new JPanel(new BorderLayout());
+        frame.add(framePanel);
+
         // we will use the NORTH, CENTER, and SOUTH of the default
         // BorderLayout for panels that contain the order status,
         // next order details, and control buttons, respectively.
@@ -137,7 +138,7 @@ public class FiveGuys implements Runnable, ActionListener, ItemListener, ChangeL
         framePanel.add(statusPanel, BorderLayout.NORTH);
 
         // next, the main controls area where the order information is selected
-        // again with a BoxLayout to get a vertical stack - here there will be a 
+        // again with a BoxLayout to get a vertical stack - here there will be a
         // stack of JPanels each of which holds controls for one of the types of
         // items our customers can order
         JPanel orderPanel = new JPanel();
@@ -164,17 +165,17 @@ public class FiveGuys implements Runnable, ActionListener, ItemListener, ChangeL
             burgerMenu.addItem(numPatties + " Patties");
         }
         burgerMenu.setSelectedItem("No Burger");
-        
+
         // we want to be notified when someone changes this
         // so the option buttons can be enabled/disabled
         burgerMenu.addActionListener(this);
-        
+
         burgerPanel.add(burgerMenu);
-        
+
         // we will create JCheckBox items for each optional topping
         // available on our burgers
         burgerChecks = new JCheckBox[burgerOptions.length];
-        
+
         for (int option = 0; option < burgerOptions.length; option++) {
             burgerChecks[option] = new JCheckBox(burgerOptions[option]);
             burgerChecks[option].setSelected(false);
@@ -183,14 +184,15 @@ public class FiveGuys implements Runnable, ActionListener, ItemListener, ChangeL
             burgerChecks[option].setEnabled(false);
             burgerPanel.add(burgerChecks[option]);
         }
-        
+
         // fries order
         JPanel friesPanel = new JPanel();
         friesPanel.add(new JLabel("Fries:"));
         orderPanel.add(friesPanel);
-        
+
         // just for something different, we'll create radio buttons for the french fry
-        // sizes - by adding the radio buttons to this same button group, we are ensuring
+        // sizes - by adding the radio buttons to this same button group, we are
+        // ensuring
         // that at most one can ever be selected at once
         ButtonGroup fryRadio = new ButtonGroup();
         frySizeButtons = new JRadioButton[frySizes.length];
@@ -205,45 +207,44 @@ public class FiveGuys implements Runnable, ActionListener, ItemListener, ChangeL
         // enable or disable the checkbox for cajun seasoning below
         frySizeButtons[0].addItemListener(this);
 
-        
         // Cajun style option: a single check box
         cajunOption = new JCheckBox("Cajun Style");
         friesPanel.add(cajunOption);
         cajunOption.setEnabled(false);
-        
+
         // how many ounces of soft drink, use a JSpinner, just for fun
         JPanel drinkPanel = new JPanel();
         drinkPanel.add(new JLabel("Soft Drink (in ounces):"));
         orderPanel.add(drinkPanel);
-       
+
         // the "SpinnerNumberModel" here sets the start value, min, max, and
         // increment values for the spinner
         drinkSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 128, 8));
         drinkPanel.add(drinkSpinner);
         // note that we could add appropriate listeners
         // to our spinner but none is needed in this case
-        
+
         drinkPanel.add(new JLabel("[Choose your own flavors at the machine!]"));
 
         // to make this seem more like Five Guys, we have peanuts!
         JPanel peanutPanel = new JPanel();
         peanutPanel.add(new JLabel("Peanut request:"));
         orderPanel.add(peanutPanel);
-        
+
         // a slider that can take on values from 0 to the last entry in
         // the peanut amounts array
-        peanutSlider = new JSlider(0, peanutAmounts.length-1, 0);
+        peanutSlider = new JSlider(0, peanutAmounts.length - 1, 0);
         peanutPanel.add(peanutSlider);
         // a label that we'll update with appropriate text as the slider slides
         peanutLabel = new JLabel(peanutAmounts[0]);
         peanutPanel.add(peanutLabel);
         // add the change listener so we are notified when the slider moves
         peanutSlider.addChangeListener(this);
-        
+
         // this will put a divider line between the main "ordering" controls
         // and the buttons at the bottom
         orderPanel.add(new JSeparator());
-        
+
         framePanel.add(orderPanel, BorderLayout.CENTER);
 
         // last, the buttons to submit orders, reset, etc.
@@ -258,57 +259,57 @@ public class FiveGuys implements Runnable, ActionListener, ItemListener, ChangeL
         buttonPanel.add(clearButton);
 
         framePanel.add(buttonPanel, BorderLayout.SOUTH);
-	// display the window we've created
-	frame.pack();
-	frame.setVisible(true);
+        // display the window we've created
+        frame.pack();
+        frame.setVisible(true);
     }
 
     /**
-       Method to be called when the state of our "None" radio button changes.
-
-       Satisfies the ItemListener interface.
-
-       @param e the ItemEvent that trigged the method call
-    */
+     * Method to be called when the state of our "None" radio button changes.
+     * 
+     * Satisfies the ItemListener interface.
+     * 
+     * @param e the ItemEvent that trigged the method call
+     */
     public void itemStateChanged(ItemEvent e) {
-        
-        cajunOption.setEnabled(!frySizeButtons[0].isSelected());    
+
+        cajunOption.setEnabled(!frySizeButtons[0].isSelected());
     }
 
     /**
-       Method to be called when the slider is moved.
-
-       Satisfies the ChangeListener interface.
-
-       @param e the ChangeEvent that triggered the method call
-    */
+     * Method to be called when the slider is moved.
+     * 
+     * Satisfies the ChangeListener interface.
+     * 
+     * @param e the ChangeEvent that triggered the method call
+     */
     public void stateChanged(ChangeEvent e) {
-        
+
         // we update the peanut label based on the new value of the
         // peanut slider
         peanutLabel.setText(peanutAmounts[peanutSlider.getValue()]);
     }
 
     /**
-       Method to be called when buttons are pressed or a JComboBox
-       selection changes.
-
-       Satisfies the ActionListener interface
-
-       @param e the ActionEvent that triggered the method call
-    */
+     * Method to be called when buttons are pressed or a JComboBox
+     * selection changes.
+     * 
+     * Satisfies the ActionListener interface
+     * 
+     * @param e the ActionEvent that triggered the method call
+     */
     public void actionPerformed(ActionEvent e) {
 
         // first check if it's the JComboBox selection changing
         if (e.getSource() == burgerMenu) {
-            // we want to enable the burger option buttons if "No Burger" is 
+            // we want to enable the burger option buttons if "No Burger" is
             boolean buttonStatus = !burgerMenu.getSelectedItem().equals("No Burger");
             for (int option = 0; option < burgerOptions.length; option++) {
                 burgerChecks[option].setEnabled(buttonStatus);
             }
             return;
         }
-                
+
         // an alternate way to determine which object generated the event
         if (e.getActionCommand().equals("Add To Order")) {
             StringBuilder appendOrder = new StringBuilder();
@@ -322,7 +323,7 @@ public class FiveGuys implements Runnable, ActionListener, ItemListener, ChangeL
             // a boolean to make sure this person ordered something, will set to true
             // as soon as we find something
             boolean orderedSomething = false;
-            
+
             // retrieve the current selection from the JComboBox for the burger order
             // the cast to String is necessary here since any Object can be the value
             // returned by getSelectedItem
@@ -339,7 +340,7 @@ public class FiveGuys implements Runnable, ActionListener, ItemListener, ChangeL
                 }
                 appendOrder.append("] ");
             }
-            
+
             // check on the fries
             if (!frySizeButtons[0].isSelected()) {
                 orderedSomething = true;
@@ -353,24 +354,24 @@ public class FiveGuys implements Runnable, ActionListener, ItemListener, ChangeL
                     appendOrder.append("[ Cajun Style ] ");
                 }
             }
-            
+
             // how about a drink?
-            int drinkSize = (Integer)drinkSpinner.getValue();           
+            int drinkSize = (Integer) drinkSpinner.getValue();
             if (drinkSize > 0) {
                 orderedSomething = true;
-                appendOrder.append(drinkSize + " oz. soft drink ");                
+                appendOrder.append(drinkSize + " oz. soft drink ");
             }
-            
-            // peanuts?  These don't count as an "orderedSomething" item, since they're
+
+            // peanuts? These don't count as an "orderedSomething" item, since they're
             // complementary, but we'll report them in the order
             appendOrder.append("Peanut quantity: " + peanutAmounts[peanutSlider.getValue()]);
-            
+
             // make sure we have ordered something
             if (!orderedSomething) {
                 JOptionPane.showMessageDialog(null, "No items ordered!", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            
+
             // we have a successful order, add to the text area
             appendOrder.append("\n");
             orderStatus.append(appendOrder.toString());
@@ -392,16 +393,16 @@ public class FiveGuys implements Runnable, ActionListener, ItemListener, ChangeL
     }
 
     /**
-       main method to construct our object and launch a thread
-       to run it.
-
-       @param args not used
-    */
+     * main method to construct our object and launch a thread
+     * to run it.
+     * 
+     * @param args not used
+     */
     public static void main(String args[]) {
 
-	// The main method is responsible for creating a thread that
-	// will construct and show the graphical user interface.
-	javax.swing.SwingUtilities.invokeLater(new FiveGuys());
+        // The main method is responsible for creating a thread that
+        // will construct and show the graphical user interface.
+        javax.swing.SwingUtilities.invokeLater(new FiveGuys());
     }
 
 }
